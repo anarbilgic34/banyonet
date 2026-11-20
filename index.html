@@ -374,7 +374,8 @@
                                         <option value="Mika Duşakabin (8.250 TL - Nakliye & Montaj Dahil)">Mika Duşakabin — 8.250 TL</option>
                                         <option value="Şeffaf Cam Duşakabin (8.500 TL - Nakliye & Montaj Dahil)">Şeffaf Cam — 8.500 TL</option>
                                         <option value="Buzlu Cam Duşakabin (9.000 TL - Nakliye & Montaj Dahil)">Buzlu Cam — 9.000 TL</option>
-                                        <option value="Karolaj Cam - Ortası Buzlu (9.250 TL - Nakliye & Montaj Dahil)">Karolaj Cam (Ortası Buzlu) — 9.250 TL</option>
+                                        <option value="Karolaj Cam - Ortası Buzlu 1 (9.250 TL - Nakliye & Montaj Dahil)">Karolaj Cam (Ortası Buzlu 1) — 9.250 TL</option>
+                                        <option value="Karolaj Cam - Ortası Buzlu 2 (9.250 TL - Nakliye & Montaj Dahil)">Karolaj Cam (Ortası Buzlu 2) — 9.250 TL</option>
                                         <option value="Karolaj Cam - Tam Şeffaf (9.250 TL - Nakliye & Montaj Dahil)">Karolaj Cam (Tam Şeffaf) — 9.250 TL</option>
                                     </select>
                                 </div>
@@ -491,13 +492,13 @@
         <span class="text-sm">0546 503 40 33</span>
     </a>
 
-    <!-- Tam Ekran Çizim Önizleme (Lightbox Modal) -->
+    <!-- Tam Ekran Fotoğraf Önizleme (Lightbox Modal) -->
     <div id="imageLightbox" class="fixed inset-0 z-50 hidden bg-slate-950/90 backdrop-blur-sm p-4 sm:p-6 flex items-center justify-center" onclick="closeLightbox(event)">
         <div class="relative max-w-2xl w-full bg-slate-900 rounded-3xl overflow-hidden shadow-2xl border border-slate-700" onclick="event.stopPropagation()">
             <button type="button" onclick="closeLightbox()" aria-label="Kapat" class="absolute top-3 right-3 z-10 w-10 h-10 rounded-full bg-slate-950/90 hover:bg-slate-800 border border-slate-700 text-white font-bold flex items-center justify-center shadow-lg transition">
                 ✕
             </button>
-            <div id="lightboxMediaContainer" class="bg-slate-950 py-8 px-6 flex items-center justify-center"></div>
+            <div id="lightboxMediaContainer" class="bg-slate-950 max-h-[72vh] overflow-hidden flex items-center justify-center"></div>
             <div class="p-4 sm:p-5 bg-slate-900 flex flex-col sm:flex-row items-center justify-between gap-3 border-t border-slate-800">
                 <p id="lightboxCaption" class="text-xs sm:text-sm font-extrabold text-white text-center sm:text-left"></p>
                 <a id="lightboxWaBtn" href="https://wa.me/905465034033" target="_blank" rel="noopener noreferrer" class="w-full sm:w-auto px-5 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-extrabold text-center transition shrink-0">
@@ -508,18 +509,127 @@
     </div>
 
     <script>
+        // GitHub deposundaki .jpeg dosya adlarıyla birebir eşleşen harita
+        const modelPhotoMap = {
+            mika: {
+                chrome: [
+                    {
+                        label: 'Krom Profil',
+                        fullName: 'Mika Duşakabin (Krom Profil)',
+                        image: 'mika-krom.jpeg',
+                        fallbackType: 'mika'
+                    }
+                ],
+                black: [
+                    {
+                        label: 'Siyah Profil',
+                        fullName: 'Mika Duşakabin (Siyah Profil)',
+                        image: 'mika-siyah.jpeg',
+                        fallbackType: 'mika'
+                    }
+                ]
+            },
+            seffaf: {
+                chrome: [
+                    {
+                        label: 'Krom Profil',
+                        fullName: 'Şeffaf Cam Duşakabin (Krom Profil)',
+                        image: 'seffaf-krom.jpeg',
+                        fallbackType: 'seffaf'
+                    }
+                ],
+                black: [
+                    {
+                        label: 'Siyah Profil',
+                        fullName: 'Şeffaf Cam Duşakabin (Siyah Profil)',
+                        image: 'seffaf-siyah.jpeg',
+                        fallbackType: 'seffaf'
+                    }
+                ]
+            },
+            buzlu: {
+                chrome: [
+                    {
+                        label: 'Krom Model 1',
+                        fullName: 'Buzlu Cam Duşakabin (Krom - Model 1)',
+                        image: 'buzlu-krom-1.jpeg',
+                        fallbackType: 'buzlu'
+                    },
+                    {
+                        label: 'Krom Model 2',
+                        fullName: 'Buzlu Cam Duşakabin (Krom - Model 2)',
+                        image: 'buzlu-krom-2.jpeg',
+                        fallbackType: 'buzlu'
+                    },
+                    {
+                        label: 'Krom Model 3',
+                        fullName: 'Buzlu Cam Duşakabin (Krom - Model 3)',
+                        image: 'buzlu-krom-3.jpeg',
+                        fallbackType: 'buzlu'
+                    },
+                    {
+                        label: 'Krom Model 4',
+                        fullName: 'Buzlu Cam Duşakabin (Krom - Model 4)',
+                        image: 'buzlu-krom-4.jpeg',
+                        fallbackType: 'buzlu'
+                    },
+                    {
+                        label: 'Krom Model 5',
+                        fullName: 'Buzlu Cam Duşakabin (Krom - Model 5)',
+                        image: 'buzlu-krom-5.jpeg',
+                        fallbackType: 'buzlu'
+                    }
+                ],
+                black: [
+                    {
+                        label: 'Siyah Model 1',
+                        fullName: 'Buzlu Cam Duşakabin (Siyah - Model 1)',
+                        image: 'buzlu-siyah-1.jpeg',
+                        fallbackType: 'buzlu'
+                    },
+                    {
+                        label: 'Siyah Model 2',
+                        fullName: 'Buzlu Cam Duşakabin (Siyah - Model 2)',
+                        image: 'buzlu-siyah-2.jpeg',
+                        fallbackType: 'buzlu'
+                    },
+                    {
+                        label: 'Siyah Model 3',
+                        fullName: 'Buzlu Cam Duşakabin (Siyah - Model 3)',
+                        image: 'buzlu-siyah-3.jpeg',
+                        fallbackType: 'buzlu'
+                    },
+                    {
+                        label: 'Siyah Model 4',
+                        fullName: 'Buzlu Cam Duşakabin (Siyah - Model 4)',
+                        image: 'buzlu-siyah-4.jpeg',
+                        fallbackType: 'buzlu'
+                    }
+                ]
+            }
+        };
+
         const karolajVariants = [
             {
-                id: 'ortasi-buzlu',
-                shortLabel: 'Ortası Buzlu',
-                fullName: 'Ortası Buzlu Karolaj Duşakabin',
-                svgType: 'karolaj-buzlu'
+                id: 'ortasi-buzlu-1',
+                shortLabel: 'Ortası Buzlu 1',
+                fullName: 'Ortası Buzlu Karolaj Duşakabin (Model 1)',
+                image: 'karolaj-buzlu-1.jpeg',
+                fallbackType: 'karolaj-buzlu'
+            },
+            {
+                id: 'ortasi-buzlu-2',
+                shortLabel: 'Ortası Buzlu 2',
+                fullName: 'Ortası Buzlu Karolaj Duşakabin (Model 2)',
+                image: 'karolaj-buzlu-2.jpeg',
+                fallbackType: 'karolaj-buzlu'
             },
             {
                 id: 'tam-seffaf',
                 shortLabel: 'Tam Şeffaf',
                 fullName: 'Tam Şeffaf Cam Karolaj Duşakabin',
-                svgType: 'karolaj-seffaf'
+                image: 'karolaj-seffaf.jpeg',
+                fallbackType: 'karolaj-seffaf'
             }
         ];
 
@@ -535,7 +645,7 @@
                     '2 Yıl üretici garantisi',
                     'İstanbul içi ücretsiz nakliye ve montaj'
                 ],
-                svgType: 'mika'
+                type: 'mika'
             },
             {
                 id: 'seffaf',
@@ -548,7 +658,7 @@
                     '2 Yıl üretici garantisi',
                     'İstanbul içi ücretsiz nakliye ve montaj'
                 ],
-                svgType: 'seffaf'
+                type: 'seffaf'
             },
             {
                 id: 'buzlu',
@@ -561,7 +671,7 @@
                     'Paslanmaz eloksallı alüminyum profil',
                     'İstanbul içi ücretsiz nakliye ve montaj'
                 ],
-                svgType: 'buzlu'
+                type: 'buzlu'
             },
             {
                 id: 'karolaj',
@@ -574,7 +684,7 @@
                     'Paslanmaz eloksallı alüminyum profil',
                     'İstanbul içi ücretsiz nakliye ve montaj'
                 ],
-                svgType: 'karolaj'
+                type: 'karolaj'
             }
         ];
 
@@ -622,6 +732,12 @@
             seffaf: 'chrome',
             buzlu: 'black',
             karolaj: 'black'
+        };
+
+        const galleryIndices = {
+            mika: 0,
+            seffaf: 0,
+            buzlu: 0
         };
 
         let selectedKarolajIndex = 0;
@@ -692,10 +808,17 @@
             `;
         }
 
-        function openLightbox(svgType, profileColor, caption) {
+        function handleImageFallback(imgElement, fallbackType, profileColor) {
+            const parent = imgElement.parentElement;
+            if (!parent) return;
+            const svgHtml = generateCabinSVG(fallbackType, profileColor || 'black', 'w-44 h-48');
+            parent.innerHTML = `<div class="w-full h-full bg-slate-950/90 flex items-center justify-center p-3">${svgHtml}</div>`;
+        }
+
+        function openLightbox(imgSrc, caption, fallbackType, profileColor) {
             const modal = document.getElementById('imageLightbox');
             const container = document.getElementById('lightboxMediaContainer');
-            container.innerHTML = generateCabinSVG(svgType, profileColor, 'w-64 h-72');
+            container.innerHTML = `<img id="lightboxImg" src="${imgSrc}" alt="${caption}" onerror="handleImageFallback(this, '${fallbackType}', '${profileColor}')" class="w-full h-full max-h-[72vh] object-contain">`;
             document.getElementById('lightboxCaption').textContent = caption;
             const waMsg = encodeURIComponent(`Merhaba BANYONET Duşakabin ve Banyo, *${caption}* modeliniz için sipariş ve bilgi almak istiyorum.`);
             document.getElementById('lightboxWaBtn').href = `https://wa.me/905465034033?text=${waMsg}`;
@@ -710,6 +833,22 @@
 
         function switchCardProfile(productId, profileColor) {
             selectedProfiles[productId] = profileColor;
+            if (galleryIndices[productId] !== undefined) {
+                galleryIndices[productId] = 0;
+            }
+            renderProducts();
+        }
+
+        function stepGallery(productId, delta) {
+            const profile = selectedProfiles[productId];
+            const list = modelPhotoMap[productId]?.[profile] || [];
+            if (list.length <= 1) return;
+            galleryIndices[productId] = (galleryIndices[productId] + delta + list.length) % list.length;
+            renderProducts();
+        }
+
+        function setGalleryIndex(productId, idx) {
+            galleryIndices[productId] = idx;
             renderProducts();
         }
 
@@ -725,61 +864,99 @@
                 const currentProfile = selectedProfiles[product.id];
                 const profileLabel = currentProfile === 'black' ? 'Siyah Mat Profil' : 'Krom (Gümüş) Profil';
 
-                let activeSvgType = product.svgType;
-                let orderModelName = `${product.name} (${profileLabel})`;
+                let mediaHtml = '';
                 let selectorHtml = '';
+                let orderModelName = `${product.name} (${profileLabel})`;
 
                 if (isKarolaj) {
                     const activeVariant = karolajVariants[selectedKarolajIndex];
-                    activeSvgType = activeVariant.svgType;
                     orderModelName = `${activeVariant.fullName} (${profileLabel})`;
 
+                    mediaHtml = `
+                        <div class="bg-slate-950/90 rounded-2xl overflow-hidden border border-slate-800 relative mb-3.5 h-56 group cursor-pointer"
+                             onclick="openLightbox('${activeVariant.image}', '${activeVariant.fullName} — ${product.price} TL Montaj Dahil', '${activeVariant.fallbackType}', '${currentProfile}')">
+                            <img src="${activeVariant.image}" alt="${activeVariant.fullName}"
+                                 onerror="handleImageFallback(this, '${activeVariant.fallbackType}', '${currentProfile}')"
+                                 class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
+                            <span class="absolute top-2.5 right-2.5 px-2.5 py-1 rounded-lg bg-slate-950/85 border border-slate-700 text-sky-300 text-[10px] font-bold backdrop-blur-sm">
+                                🔍 Büyüt
+                            </span>
+                            <span class="absolute bottom-2 left-2 px-2.5 py-0.5 rounded-md bg-slate-950/90 text-[10px] font-bold text-amber-400 border border-amber-500/30">
+                                Gerçek Montaj Fotoğrafı
+                            </span>
+                        </div>
+                    `;
+
                     selectorHtml = `
-                        <div class="mb-3">
-                            <div class="text-[11px] text-slate-400 font-semibold mb-1.5 text-center">Cam Deseni:</div>
-                            <div class="grid grid-cols-2 gap-1.5">
+                        <div class="mb-4">
+                            <div class="text-[11px] text-slate-400 font-semibold mb-1.5 text-center">Model Seçeneği:</div>
+                            <div class="grid grid-cols-3 gap-1.5">
                                 ${karolajVariants.map((variant, idx) => `
                                     <button type="button" onclick="switchKarolajVariant(${idx})"
-                                        class="py-1.5 px-2 rounded-lg text-[11px] font-bold border transition text-center truncate ${selectedKarolajIndex === idx ? 'border-amber-400 bg-amber-500/20 text-amber-300' : 'border-slate-700 bg-slate-900 text-slate-400 hover:text-white'}">
+                                        class="py-1.5 px-1.5 rounded-lg text-[11px] font-bold border transition text-center truncate ${selectedKarolajIndex === idx ? 'border-amber-400 bg-amber-500/20 text-amber-300' : 'border-slate-700 bg-slate-900 text-slate-400 hover:text-white'}">
                                         ${variant.shortLabel}
                                     </button>
                                 `).join('')}
                             </div>
                         </div>
                     `;
-                }
+                } else {
+                    const photoList = modelPhotoMap[product.id][currentProfile];
+                    const activeIdx = Math.min(galleryIndices[product.id] || 0, photoList.length - 1);
+                    const activePhoto = photoList[activeIdx];
+                    orderModelName = activePhoto.fullName;
 
-                selectorHtml += `
-                    <div class="mb-4">
-                        <div class="text-[11px] text-slate-400 font-semibold mb-1.5 text-center">Profil Rengi Seçin:</div>
-                        <div class="grid grid-cols-2 gap-2">
-                            <button type="button" onclick="switchCardProfile('${product.id}', 'chrome')"
-                                class="py-1.5 px-2 rounded-lg text-xs font-bold flex items-center justify-center gap-1.5 border transition ${currentProfile === 'chrome' ? 'border-sky-400 bg-sky-500/20 text-white' : 'border-slate-700 bg-slate-900 text-slate-400 hover:text-white'}">
-                                <span class="w-2.5 h-2.5 rounded-full bg-gradient-to-tr from-slate-400 to-white"></span>
-                                Krom
-                            </button>
-                            <button type="button" onclick="switchCardProfile('${product.id}', 'black')"
-                                class="py-1.5 px-2 rounded-lg text-xs font-bold flex items-center justify-center gap-1.5 border transition ${currentProfile === 'black' ? 'border-amber-400 bg-amber-500/20 text-amber-300' : 'border-slate-700 bg-slate-900 text-slate-400 hover:text-white'}">
-                                <span class="w-2.5 h-2.5 rounded-full bg-slate-950 border border-slate-500"></span>
-                                Siyah
-                            </button>
+                    const multiControlsHtml = photoList.length > 1 ? `
+                        <button type="button" onclick="event.stopPropagation(); stepGallery('${product.id}', -1)" aria-label="Önceki Model"
+                            class="absolute left-2 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-slate-950/85 hover:bg-slate-800 border border-slate-700 text-white font-bold flex items-center justify-center transition">
+                            ‹
+                        </button>
+                        <button type="button" onclick="event.stopPropagation(); stepGallery('${product.id}', 1)" aria-label="Sonraki Model"
+                            class="absolute right-2 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-slate-950/85 hover:bg-slate-800 border border-slate-700 text-white font-bold flex items-center justify-center transition">
+                            ›
+                        </button>
+                        <div class="absolute bottom-2 right-2 flex items-center gap-1 bg-slate-950/85 border border-slate-700 px-2 py-1 rounded-full">
+                            ${photoList.map((_, i) => `
+                                <button type="button" onclick="event.stopPropagation(); setGalleryIndex('${product.id}', ${i})" aria-label="Model ${i + 1}"
+                                    class="w-2 h-2 rounded-full transition ${i === activeIdx ? 'bg-amber-400 scale-110' : 'bg-slate-600'}"></button>
+                            `).join('')}
                         </div>
-                    </div>
-                `;
+                    ` : '';
 
-                const captionText = `${orderModelName} — ${product.price} TL Montaj Dahil`;
-                const mediaHtml = `
-                    <div class="bg-slate-950/90 rounded-2xl overflow-hidden border border-slate-800 relative mb-3.5 h-56 flex items-center justify-center p-3 group cursor-pointer"
-                         onclick="openLightbox('${activeSvgType}', '${currentProfile}', '${captionText}')">
-                        ${generateCabinSVG(activeSvgType, currentProfile, 'w-44 h-48')}
-                        <span class="absolute top-2.5 right-2.5 px-2.5 py-1 rounded-lg bg-slate-950/85 border border-slate-700 text-sky-300 text-[10px] font-bold backdrop-blur-sm">
-                            🔍 Büyüt
-                        </span>
-                        <span class="absolute bottom-2 left-2 px-2.5 py-0.5 rounded-md bg-slate-950/90 text-[10px] font-bold text-amber-400 border border-amber-500/30">
-                            ${profileLabel}
-                        </span>
-                    </div>
-                `;
+                    mediaHtml = `
+                        <div class="bg-slate-950/90 rounded-2xl overflow-hidden border border-slate-800 relative mb-3.5 h-56 group cursor-pointer"
+                             onclick="openLightbox('${activePhoto.image}', '${activePhoto.fullName} — ${product.price} TL Montaj Dahil', '${activePhoto.fallbackType}', '${currentProfile}')">
+                            <img src="${activePhoto.image}" alt="${activePhoto.fullName}"
+                                 onerror="handleImageFallback(this, '${activePhoto.fallbackType}', '${currentProfile}')"
+                                 class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
+                            <span class="absolute top-2.5 right-2.5 px-2.5 py-1 rounded-lg bg-slate-950/85 border border-slate-700 text-sky-300 text-[10px] font-bold backdrop-blur-sm">
+                                🔍 Büyüt
+                            </span>
+                            <span class="absolute bottom-2 left-2 px-2.5 py-0.5 rounded-md bg-slate-950/90 text-[10px] font-bold text-amber-400 border border-amber-500/30">
+                                ${photoList.length > 1 ? `${activePhoto.label} (${activeIdx + 1}/${photoList.length})` : 'Gerçek Montaj Fotoğrafı'}
+                            </span>
+                            ${multiControlsHtml}
+                        </div>
+                    `;
+
+                    selectorHtml = `
+                        <div class="mb-4">
+                            <div class="text-[11px] text-slate-400 font-semibold mb-1.5 text-center">Profil Rengi Seçin:</div>
+                            <div class="grid grid-cols-2 gap-2">
+                                <button type="button" onclick="switchCardProfile('${product.id}', 'chrome')"
+                                    class="py-1.5 px-2 rounded-lg text-xs font-bold flex items-center justify-center gap-1.5 border transition ${currentProfile === 'chrome' ? 'border-sky-400 bg-sky-500/20 text-white' : 'border-slate-700 bg-slate-900 text-slate-400 hover:text-white'}">
+                                    <span class="w-2.5 h-2.5 rounded-full bg-gradient-to-tr from-slate-400 to-white"></span>
+                                    Krom
+                                </button>
+                                <button type="button" onclick="switchCardProfile('${product.id}', 'black')"
+                                    class="py-1.5 px-2 rounded-lg text-xs font-bold flex items-center justify-center gap-1.5 border transition ${currentProfile === 'black' ? 'border-amber-400 bg-amber-500/20 text-amber-300' : 'border-slate-700 bg-slate-900 text-slate-400 hover:text-white'}">
+                                    <span class="w-2.5 h-2.5 rounded-full bg-slate-950 border border-slate-500"></span>
+                                    Siyah
+                                </button>
+                            </div>
+                        </div>
+                    `;
+                }
 
                 const whatsappMessage = encodeURIComponent(
                     `Merhaba BANYONET Duşakabin ve Banyo, *${orderModelName}* - *${product.price} TL (İstanbul İçi Ücretsiz Nakliye ve Montaj Dahil)* kampanyanız hakkında sipariş ve bilgi almak istiyorum.`
