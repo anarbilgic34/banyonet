@@ -46,9 +46,6 @@
             background: linear-gradient(135deg, #b45309 0%, #f59e0b 50%, #fbbf24 100%);
             box-shadow: 0 4px 22px rgba(245, 158, 11, 0.35);
         }
-        .cabin-transition {
-            transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
-        }
         @keyframes pulse-ring {
             0% { transform: scale(0.95); opacity: 0.75; }
             70% { transform: scale(1.2); opacity: 0; }
@@ -191,6 +188,7 @@
                     <img
                         src="images/galeri/yeni logo banyonet.jpeg"
                         alt="BANYONET Duşakabin ve Banyo Sistemleri - İstanbul İçi Ücretsiz Nakliye ve Montaj"
+                        onerror="this.onerror=null;this.src='images/galeri/buzlu-krom-1.jpeg';"
                         class="w-full h-auto max-h-[430px] object-cover rounded-2xl block mx-auto"
                     />
                 </div>
@@ -481,13 +479,13 @@
         <span class="text-sm">0546 503 40 33</span>
     </a>
 
-    <!-- Tam Ekran Çizim Önizleme (Lightbox Modal) -->
+    <!-- Tam Ekran Fotoğraf Önizleme (Lightbox Modal) -->
     <div id="imageLightbox" class="fixed inset-0 z-50 hidden bg-slate-950/90 backdrop-blur-sm p-4 sm:p-6 flex items-center justify-center" onclick="closeLightbox(event)">
         <div class="relative max-w-2xl w-full bg-slate-900 rounded-3xl overflow-hidden shadow-2xl border border-slate-700" onclick="event.stopPropagation()">
             <button type="button" onclick="closeLightbox()" aria-label="Kapat" class="absolute top-3 right-3 z-10 w-10 h-10 rounded-full bg-slate-950/90 hover:bg-slate-800 border border-slate-700 text-white font-bold flex items-center justify-center shadow-lg transition">
                 ✕
             </button>
-            <div id="lightboxMediaContainer" class="bg-slate-950 py-8 px-6 flex items-center justify-center"></div>
+            <div id="lightboxMediaContainer" class="bg-slate-950 p-4 flex items-center justify-center"></div>
             <div class="p-4 sm:p-5 bg-slate-900 flex flex-col sm:flex-row items-center justify-between gap-3 border-t border-slate-800">
                 <p id="lightboxCaption" class="text-xs sm:text-sm font-extrabold text-white text-center sm:text-left"></p>
                 <a id="lightboxWaBtn" href="https://wa.me/905465034033" target="_blank" rel="noopener noreferrer" class="w-full sm:w-auto px-5 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-extrabold text-center transition shrink-0">
@@ -498,18 +496,20 @@
     </div>
 
     <script>
+        const FALLBACK_PHOTO = 'images/galeri/buzlu-krom-1.jpeg';
+
         const karolajVariants = [
             {
                 id: 'ortasi-buzlu',
                 shortLabel: 'Ortası Buzlu',
                 fullName: 'Ortası Buzlu Karolaj Duşakabin',
-                svgType: 'karolaj-buzlu'
+                photoKey: 'karolaj-buzlu'
             },
             {
                 id: 'tam-seffaf',
                 shortLabel: 'Tam Şeffaf',
                 fullName: 'Tam Şeffaf Cam Karolaj Duşakabin',
-                svgType: 'karolaj-seffaf'
+                photoKey: 'karolaj-seffaf'
             }
         ];
 
@@ -525,7 +525,7 @@
                     '2 Yıl üretici garantisi',
                     'İstanbul içi ücretsiz nakliye ve montaj'
                 ],
-                svgType: 'mika'
+                photoKey: 'mika'
             },
             {
                 id: 'seffaf',
@@ -538,7 +538,7 @@
                     '2 Yıl üretici garantisi',
                     'İstanbul içi ücretsiz nakliye ve montaj'
                 ],
-                svgType: 'seffaf'
+                photoKey: 'seffaf'
             },
             {
                 id: 'buzlu',
@@ -551,7 +551,7 @@
                     'Paslanmaz eloksallı alüminyum profil',
                     'İstanbul içi ücretsiz nakliye ve montaj'
                 ],
-                svgType: 'buzlu'
+                photoKey: 'buzlu'
             },
             {
                 id: 'karolaj',
@@ -564,7 +564,7 @@
                     'Paslanmaz eloksallı alüminyum profil',
                     'İstanbul içi ücretsiz nakliye ve montaj'
                 ],
-                svgType: 'karolaj'
+                photoKey: 'karolaj'
             }
         ];
 
@@ -621,71 +621,25 @@
             menu.classList.toggle('hidden');
         }
 
-        function generateCabinSVG(type, profileColor, sizeClass = 'w-44 h-48') {
-            const strokeColor = profileColor === 'black' ? '#0f172a' : '#cbd5e1';
-            const profileHighlight = profileColor === 'black' ? '#475569' : '#f8fafc';
-            const handleColor = profileColor === 'black' ? '#020617' : '#e2e8f0';
-
-            let glassFill = 'fill="#38bdf8" fill-opacity="0.14"';
-            let extraDetails = '';
-
-            if (type === 'mika') {
-                glassFill = 'fill="#94a3b8" fill-opacity="0.34"';
-                extraDetails = `<path d="M55 44V210M75 50V216M145 50V216M165 44V210" stroke="#e2e8f0" stroke-width="1" stroke-dasharray="3 2" opacity="0.45"/>`;
-            } else if (type === 'seffaf') {
-                glassFill = 'fill="#38bdf8" fill-opacity="0.14"';
-                extraDetails = `<path d="M52 60L85 95M140 70L170 100" stroke="#ffffff" stroke-width="2" stroke-linecap="round" opacity="0.55"/>`;
-            } else if (type === 'buzlu') {
-                glassFill = 'fill="#38bdf8" fill-opacity="0.14"';
-                extraDetails = `
-                    <path d="M35 85L110 106V185L35 162V85Z" fill="#e2e8f0" fill-opacity="0.65"/>
-                    <path d="M185 85L110 106V185L185 162V85Z" fill="#e2e8f0" fill-opacity="0.65"/>
-                `;
-            } else if (type === 'karolaj-buzlu') {
-                glassFill = 'fill="#38bdf8" fill-opacity="0.13"';
-                extraDetails = `
-                    <path d="M35 88L110 110V166L35 144V88Z" fill="#e2e8f0" fill-opacity="0.72"/>
-                    <path d="M185 88L110 110V166L185 144V88Z" fill="#e2e8f0" fill-opacity="0.72"/>
-                    <g stroke="${strokeColor}" stroke-width="2.2">
-                        <path d="M35 88L110 110L185 88"/>
-                        <path d="M35 144L110 166L185 144"/>
-                        <path d="M60 41V204"/><path d="M85 48V212"/><path d="M135 48V212"/><path d="M160 41V204"/>
-                    </g>
-                `;
-            } else if (type === 'karolaj' || type === 'karolaj-seffaf') {
-                glassFill = 'fill="#38bdf8" fill-opacity="0.13"';
-                extraDetails = `
-                    <g stroke="${strokeColor}" stroke-width="2.2">
-                        <path d="M35 88L110 110L185 88"/>
-                        <path d="M35 144L110 166L185 144"/>
-                        <path d="M60 41V204"/><path d="M85 48V212"/><path d="M135 48V212"/><path d="M160 41V204"/>
-                    </g>
-                `;
-            }
-
-            return `
-                <svg class="${sizeClass} mx-auto drop-shadow-[0_12px_20px_rgba(0,0,0,0.5)] cabin-transition" viewBox="0 0 220 235" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M35 32L110 14L185 32V198L110 220L35 198V32Z" fill="#1e293b"/>
-                    <path d="M31 198L110 223L189 198L110 178L31 198Z" fill="#f8fafc"/>
-                    <path d="M35 34L110 55V219L35 196V34Z" ${glassFill}/>
-                    <path d="M185 34L110 55V219L185 196V34Z" ${glassFill}/>
-                    ${extraDetails}
-                    <g stroke="${strokeColor}" stroke-width="3.6" stroke-linejoin="round">
-                        <path d="M35 34L110 55L185 34"/><path d="M35 196L110 219L185 196"/>
-                        <path d="M35 34V196"/><path d="M110 55V219"/><path d="M185 34V196"/>
-                        <path d="M72 44V207" stroke-width="2.2" stroke="${profileHighlight}"/>
-                        <path d="M148 44V207" stroke-width="2.2" stroke="${profileHighlight}"/>
-                    </g>
-                    <rect x="100" y="118" width="3.5" height="20" rx="1.5" fill="${handleColor}"/>
-                    <rect x="116.5" y="118" width="3.5" height="20" rx="1.5" fill="${handleColor}"/>
-                </svg>
-            `;
+        function getCardPhotoSrc(photoKey, profileColor) {
+            const suffix = profileColor === 'black' ? 'siyah' : 'krom';
+            if (photoKey === 'mika') return `images/galeri/mika-${suffix}.jpeg`;
+            if (photoKey === 'seffaf') return `images/galeri/seffaf-${suffix}.jpeg`;
+            if (photoKey === 'buzlu') return `images/galeri/buzlu-${suffix}-1.jpeg`;
+            if (photoKey === 'karolaj-buzlu') return 'images/galeri/karolaj-buzlu-1.jpeg';
+            if (photoKey === 'karolaj-seffaf' || photoKey === 'karolaj') return 'images/galeri/karolaj-seffaf.jpeg';
+            return FALLBACK_PHOTO;
         }
 
-        function openLightbox(svgType, profileColor, caption) {
+        function openLightbox(photoKey, profileColor, caption) {
             const modal = document.getElementById('imageLightbox');
             const container = document.getElementById('lightboxMediaContainer');
-            container.innerHTML = generateCabinSVG(svgType, profileColor, 'w-64 h-72');
+            const imgSrc = getCardPhotoSrc(photoKey, profileColor);
+            container.innerHTML = `
+                <img src="${imgSrc}" alt="${caption}"
+                     onerror="this.onerror=null;this.src='${FALLBACK_PHOTO}';"
+                     class="max-h-[70vh] w-auto object-contain rounded-2xl mx-auto" />
+            `;
             document.getElementById('lightboxCaption').textContent = caption;
             const waMsg = encodeURIComponent(`Merhaba BANYONET Duşakabin ve Banyo, *${caption}* modeliniz için sipariş ve bilgi almak istiyorum.`);
             document.getElementById('lightboxWaBtn').href = `https://wa.me/905465034033?text=${waMsg}`;
@@ -715,13 +669,13 @@
                 const currentProfile = selectedProfiles[product.id];
                 const profileLabel = currentProfile === 'black' ? 'Siyah Mat Profil' : 'Krom (Gümüş) Profil';
 
-                let activeSvgType = product.svgType;
+                let activePhotoKey = product.photoKey;
                 let orderModelName = `${product.name} (${profileLabel})`;
                 let selectorHtml = '';
 
                 if (isKarolaj) {
                     const activeVariant = karolajVariants[selectedKarolajIndex];
-                    activeSvgType = activeVariant.svgType;
+                    activePhotoKey = activeVariant.photoKey;
                     orderModelName = `${activeVariant.fullName} (${profileLabel})`;
 
                     selectorHtml = `
@@ -757,11 +711,14 @@
                     </div>
                 `;
 
+                const photoSrc = getCardPhotoSrc(activePhotoKey, currentProfile);
                 const captionText = `${orderModelName} — ${product.price} TL Montaj Dahil`;
                 const mediaHtml = `
-                    <div class="bg-slate-950/90 rounded-2xl overflow-hidden border border-slate-800 relative mb-3.5 h-56 flex items-center justify-center p-3 group cursor-pointer"
-                         onclick="openLightbox('${activeSvgType}', '${currentProfile}', '${captionText}')">
-                        ${generateCabinSVG(activeSvgType, currentProfile, 'w-44 h-48')}
+                    <div class="bg-slate-950/90 rounded-2xl overflow-hidden border border-slate-800 relative mb-3.5 h-56 flex items-center justify-center group cursor-pointer"
+                         onclick="openLightbox('${activePhotoKey}', '${currentProfile}', '${captionText}')">
+                        <img src="${photoSrc}" alt="${captionText}" loading="lazy"
+                             onerror="this.onerror=null;this.src='${FALLBACK_PHOTO}';"
+                             class="w-full h-full object-cover group-hover:scale-105 transition duration-300" />
                         <span class="absolute top-2.5 right-2.5 px-2.5 py-1 rounded-lg bg-slate-950/85 border border-slate-700 text-sky-300 text-[10px] font-bold backdrop-blur-sm">
                             🔍 Büyüt
                         </span>
